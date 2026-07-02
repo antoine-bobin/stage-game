@@ -1,0 +1,153 @@
+
+:root  {
+    --main-color: #1E90FF;
+    --secondary-color: #bce7e1;
+    --font-family: 'Arial', sans-serif;
+}
+
+#menu{
+    z-index: 25;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: -500px
+}   
+
+
+.attackpionpsword {
+    z-index: 10;
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    scale: 0.1;
+    margin-left: -860px;
+    margin-top: -285px;
+    rotate: 0deg;
+} 
+
+#pion{ /* 288px par 269px pour chaque sprite*/
+    display: block;
+    width: 288px;
+    height: 269px;
+    background: url("chessSpriteSheet.png") -288px -269px;
+    z-index: 20;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: -100px;
+    margin-left: -110px;
+    scale: 19.2%;
+}
+    
+#background {
+    position: static;
+    min-width: 1150px; 
+    min-height: 1000px; 
+    background-repeat: repeat;
+    background-position-x: -4px;
+    background-position-y: 0px;
+    background-image: url('chess.png') ;
+    /* scale: 2; */
+    /* z-index: 10; */
+}
+.darkknight {
+    scale: 0.4;
+    position: absolute;
+    display: none;
+    z-index: 9;
+    left: 0px;
+    top: 0px;
+    margin-left: -0;
+    margin-top: -0;
+}
+
+#spawnbossanimation {
+    position: absolute;
+    z-index: 15;
+    top: 50px;
+    left: 700px;
+    margin-left: 200;
+    margin-top: 100;
+    display: none;
+
+}
+
+#firstEnnemy{  
+    display: block;
+    width: 288px;
+    height: 269px;
+    background: url("chessSpriteSheet.png") -864px -538px;
+    z-index: 20;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    scale: 19.2%;
+    margin-top: -100px;
+    margin-left: -110px;
+    visibility: visible;
+    
+}
+
+#animationintrovsboss {
+    position: absolute;
+    z-index: 30;
+    top: 50px;
+    left: 700px;
+    margin-left: 0;
+    margin-top: 0;
+    display: none;
+}
+
+#animationintrovsboss {
+    position: absolute;
+    z-index: 40;
+    top: 100px;
+    left: 350px;
+    margin-left: 0;
+    margin-top: 0;
+    display: none;
+}
+
+#bishopAttack {
+    z-index: 10;
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    scale: 0.2;
+    margin-left: -150px;
+    margin-top: -400px;
+    rotate: 0deg;
+} 
+
+.wall{
+    display: block;
+    height: 50px;
+    width: 50px;
+    background-color: green;
+    position: absolute;
+}
+#wall1{
+    left: 200px;
+}
+#wall2{
+    left: 200px;
+    top: 50px;
+}
+#wall3{
+    left: 200px;
+    top: 100px;
+}
+#wall4{
+    left: 250px;
+    top: 0px
+}
+#wall5{
+    left: 300px;
+    top: 0px
+}
+#wall6{
+    left: 350px;
+    top: 0px;
+}

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer 2D Infini</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #startScreen.hidden {
+            display: none;
+        }
+        .startContent {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 400px;
+        }
+        .startContent h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .startContent p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .colorSelector {
+            margin: 30px 0;
+        }
+        .colorSelector label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+        .colorOptions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .colorBtn {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .colorBtn:hover {
+            transform: scale(1.1);
+            border-color: #333;
+        }
+        .colorBtn.selected {
+            border-color: #333;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        #playBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        #playBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        canvas {
+            border: 3px solid #333;
+            background-color: white;
+            cursor: default;
+            display: block;
+        }
+        .controls {
+            text-align: center;
+            color: #333;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .controls p {
+            margin: 5px 0;
+        }
+        .info {
+            font-size: 0.9em;
+            color: #666;
+        }
+        #distance {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        #hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            z-index: 100;
+        }
+        .hearts {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <div class="startContent">
+            <h1>🎮 PLATFORMER</h1>
+            <p>Saute et explore un monde sans fin!</p>
+            
+            <div class="colorSelector">
+                <label for="colorPicker">Choisir la couleur du cube:</label>
+                <div class="colorOptions">
+                    <button class="colorBtn selected" data-color="#000000" style="background-color: #000000;" title="Noir"></button>
+                    <button class="colorBtn" data-color="#FF0000" style="background-color: #FF0000;" title="Rouge"></button>
+                    <button class="colorBtn" data-color="#00FF00" style="background-color: #00FF00;" title="Vert"></button>
+                    <button class="colorBtn" data-color="#0000FF" style="background-color: #0000FF;" title="Bleu"></button>
+                    <button class="colorBtn" data-color="#FFFF00" style="background-color: #FFFF00; border-color: #999;" title="Jaune"></button>
+                    <button class="colorBtn" data-color="#FF00FF" style="background-color: #FF00FF;" title="Magenta"></button>
+                    <button class="colorBtn" data-color="#00FFFF" style="background-color: #00FFFF;" title="Cyan"></button>
+                    <button class="colorBtn" data-color="#FFA500" style="background-color: #FFA500;" title="Orange"></button>
+                </div>
+            </div>
+
+            <button id="playBtn">▶ JOUER</button>
+        </div>
+    </div>
+
+    <div id="gameContainer" style="display: none;">
+        <div id="hud">
+            <div class="hearts" id="healthDisplay">❤️❤️❤️</div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="controls">
+            <p><strong>⬅️ ➡️ = Bouger | ESPACE = Sauter | E = Tirer</strong></p>
+            <p class="info">Explore le monde infini! Évite les balles et tue les ennemis!</p>
+            <p id="distance">Distance: 0m</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+        const gameContainer = document.getElementById('gameContainer');
+        const playBtn = document.getElementById('playBtn');
+        const distanceDisplay = document.getElementById('distance');
+        const healthDisplay = document.getElementById('healthDisplay');
+
+        let playerColor = '#000000';
+        let gameStarted = false;
+
+        // Gestion du menu de démarrage
+        document.querySelectorAll('.colorBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.colorBtn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                playerColor = btn.dataset.color;
+            });
+        });
+
+        playBtn.addEventListener('click', () => {
+            gameStarted = true;
+            startScreen.classList.add('hidden');
+            gameContainer.style.display = 'flex';
+            gameLoop();
+        });
+
+        // Joueur (cube)
+        const player = {
+            x: 100,
+            y: 400,
+            width: 30,
+            height: 30,
+            velocityX: 0,
+            velocityY: 0,
+            speed: 5,
+            jumpPower: 12,
+            isJumping: false,
+            gravity: 0.6,
+            rotation: 0,
+            rotationVelocity: 0,
+            health: 3,
+            maxHealth: 3,
+            jumpsRemaining: 2,
+            maxJumps: 2
+        };
+
+        // Clés pressées
+        const keys = {};
+
+        // Gestion du défilement infini
+        let cameraX = 0;
+        let worldWidth = 800;
+        let maxDistance = 0;
+        let lastGeneratedX = 0;
+
+        // Tableaux de jeu
+        let platforms = [];
+        let enemies = [];
+        let playerProjectiles = [];
+        let enemyProjectiles = [];
+
+        function initializeGround() {
+            // Sol infini
+            platforms.push({ x: -10000, y: 550, width: 50000, height: 50 });
+        }
+
+        function generatePlatforms(startX, endX) {
+            for (let x = startX; x < endX; x += 80 + Math.random() * 100) {
+                const isExisting = platforms.some(p => Math.abs(p.x - x) < 50 && p.y < 540);
+                if (isExisting) continue;
+
+                const y = Math.random() * 300 + 150;
+                const width = 50 + Math.random() * 80;
+                platforms.push({ x, y, width, height: 20 });
+
+                if (Math.random() > 0.85) {
+                    enemies.push({
+                        x: x + width / 2,
+                        y: y - 40,
+                        width: 25,
+                        height: 25,
+                        health: 2,
+                        shootTimer: 0,
+                        shootInterval: 60 + Math.random() * 40
+                    });
+                }
+            }
+            lastGeneratedX = endX;
+        }
+
+        function generateStructures(startX, endX) {
+            let x = startX;
+            while (x < endX) {
+                const structType = Math.random();
+                
+                if (structType < 0.3) {
+                    // Petite tour
+                    const baseX = x;
+                    const baseY = 300 + Math.random() * 100;
+                    const width = 60;
+                    platforms.push({ x: baseX, y: baseY, width, height: 20 });
+                    platforms.push({ x: baseX + 5, y: baseY - 30, width: 50, height: 20 });
+                    platforms.push({ x: baseX + 10, y: baseY - 60, width: 40, height: 20 });
+                    
+                    if (Math.random() > 0.6) {
+                        enemies.push({
+                            x: baseX + width / 2,
+                            y: baseY - 100,
+                            width: 25,
+                            height: 25,
+                            health: 2,
+                            shootTimer: 0,
+                            shootInterval: 60 + Math.random() * 40
+                        });
+                    }
+                    x += 200;
+                } else if (structType < 0.6) {
+                    // Escalier montant
+                    const startY = 350 + Math.random() * 50;
+                    for (let i = 0; i < 4; i++) {
+                        platforms.push({
+                            x: x + i * 70,
+                            y: startY - i * 50,
+                            width: 60,
+                            height: 20
+                        });
+                    }
+                    x += 350;
+                } else {
+                    // Donjon/salle avec plateforme
+                    const roomX = x;
+                    const roomY = 280 + Math.random() * 80;
+                    
+                    // Murs
+                    platforms.push({ x: roomX, y: roomY, width: 200, height: 20 });
+                    platforms.push({ x: roomX, y: roomY - 150, width: 200, height: 20 });
+                    
+                    // Plateforme intérieure
+                    platforms.push({
+                        x: roomX + 50,
+                        y: roomY - 80,
+                        width: 100,
+                        height: 20
+                    });
+                    
+                    // Ennemi
+                    if (Math.random() > 0.5) {
+                        enemies.push({
+                            x: roomX + 100,
+                            y: roomY - 130,
+                            width: 25,
+                            height: 25,
+                            health: 2,
+                            shootTimer: 0,
+                            shootInterval: 60 + Math.random() * 40
+                        });
+                    }
+                    x += 350;
+                }
+            }
+            lastGeneratedX = endX;
+        }
+
+        // Écouteurs d'événements
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key === ' ') {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function playerShoot() {
+            playerProjectiles.push({
+                x: player.x + player.width / 2,
+                y: player.y + player.height / 2,
+                velocityX: 8,
+                velocityY: 0,
+                width: 8,
+                height: 8,
+                lifetime: 200
+            });
+        }
+
+        function updatePlayer() {
+            // Mouvement horizontal
+            if (keys['arrowleft'] || keys['a']) {
+                player.velocityX = -player.speed;
+            } else if (keys['arrowright'] || keys['d']) {
+                player.velocityX = player.speed;
+            } else {
+                player.velocityX = 0;
+            }
+
+            // Tir
+            if (keys['e']) {
+                playerShoot();
+                keys['e'] = false;
+            }
+
+            // Appliquer la gravité
+            player.velocityY += player.gravity;
+
+            // Mise à jour de la position
+            player.x += player.velocityX;
+            player.y += player.velocityY;
+
+            // Générer les plateformes au fur et à mesure
+            if (player.x + 500 > lastGeneratedX) {
+                generateStructures(lastGeneratedX, lastGeneratedX + 1200);
+            }
+
+            // Détection des collisions avec les plateformes
+            player.isJumping = true;
+
+            for (let i = 0; i < platforms.length; i++) {
+                const platform = platforms[i];
+                
+                // Collision par le bas (atterrissage)
+                if (
+                    player.velocityY >= 0 &&
+                    player.y + player.height <= platform.y + 10 &&
+                    player.y + player.height + player.velocityY >= platform.y &&
+                    player.x + player.width > platform.x &&
+                    player.x < platform.x + platform.width
+                ) {
+                    player.y = platform.y - player.height;
+                    player.velocityY = 0;
+                    player.isJumping = false;
+                }
+
+                // Collision par le haut (frapper la tête)
+                if (
+                    player.velocityY < 0 &&
+                    player.y >= platform.y + platform.height - 10 &&
+                    player.y - player.velocityY <= platform.y + platform.height &&
+                    player.x + player.width > platform.x &&
+                    player.x < platform.x + platform.width
+                ) {
+                    player.velocityY = 0;
+                    player.y = platform.y + platform.height;
+                }
+            }
+
+            // Saut avec rotation
+            if ((keys[' '] || keys['w']) && !player.isJumping) {
+                player.velocityY = -player.jumpPower;
+                player.isJumping = true;
+                player.jumpsRemaining--;
+                player.rotationVelocity = Math.PI * 2;
+            } else if ((keys[' '] || keys['w']) && player.jumpsRemaining > 0 && player.isJumping) {
+                // Double jump
+                player.velocityY = -player.jumpPower;
+                player.jumpsRemaining--;
+                player.rotationVelocity = Math.PI * 2;
+                keys[' '] = false;
+                keys['w'] = false;
+            }
+
+            // Appliquer la rotation (continue toujours)
+            if (player.rotationVelocity !== 0) {
+                player.rotation += player.rotationVelocity * 0.05;
+                player.rotationVelocity *= 0.98;
+                if (Math.abs(player.rotationVelocity) < 0.01) {
+                    player.rotationVelocity = 0;
+                }
+            }
+
+            // Réinitialiser les sauts quand on atterit
+            if (!player.isJumping) {
+                player.jumpsRemaining = player.maxJumps;
+            }
+
+            // Caméra suit le joueur
+            cameraX = Math.max(0, player.x - 100);
+
+            // Suivi de la distance
+            maxDistance = Math.max(maxDistance, Math.floor(player.x / 10));
+            distanceDisplay.textContent = `Distance: ${maxDistance}m`;
+
+            // Réinitialiser si tombé
+            if (player.y > canvas.height + 100) {
+                player.health = 0;
+            }
+        }
+
+        function updateEnemies() {
+            enemies.forEach((enemy, idx) => {
+                enemy.shootTimer++;
+                if (enemy.shootTimer >= enemy.shootInterval) {
+                    // L'ennemi tire
+                    enemyProjectiles.push({
+                        x: enemy.x,
+                        y: enemy.y,
+                        velocityX: -5,
+                        velocityY: (Math.random() - 0.5) * 3,
+                        width: 6,
+                        height: 6
+                    });
+                    enemy.shootTimer = 0;
+                }
+            });
+        }
+
+        function updateProjectiles() {
+            // Projectiles du joueur
+            playerProjectiles = playerProjectiles.filter(proj => {
+                proj.x += proj.velocityX;
+                proj.y += proj.velocityY;
+                proj.lifetime--;
+                return proj.lifetime > 0 && proj.x < canvas.width + cameraX;
+            });
+
+            // Projectiles des ennemis
+            enemyProjectiles = enemyProjectiles.filter(proj => {
+                proj.x += proj.velocityX;
+                proj.y += proj.velocityY;
+                return proj.x > cameraX - 50 && proj.x < cameraX + canvas.width + 50 && proj.y > 0 && proj.y < canvas.height;
+            });
+
+            // Collisions projectiles joueur vs ennemis
+            playerProjectiles.forEach((proj, pIdx) => {
+                enemies.forEach((enemy, eIdx) => {
+                    if (
+                        proj.x < enemy.x + enemy.width &&
+                        proj.x + proj.width > enemy.x &&
+                        proj.y < enemy.y + enemy.height &&
+                        proj.y + proj.height > enemy.y
+                    ) {
+                        enemy.health--;
+                        playerProjectiles.splice(pIdx, 1);
+                        if (enemy.health <= 0) {
+                            enemies.splice(eIdx, 1);
+                        }
+                    }
+                });
+            });
+
+            // Collisions projectiles ennemis vs joueur
+            enemyProjectiles.forEach((proj, idx) => {
+                if (
+                    proj.x < player.x + player.width &&
+                    proj.x + proj.width > player.x &&
+                    proj.y < player.y + player.height &&
+                    proj.y + proj.height > player.y
+                ) {
+                    player.health--;
+                    enemyProjectiles.splice(idx, 1);
+                }
+            });
+
+            // Mise à jour de la santé
+            let hearts = '';
+            for (let i = 0; i < player.health; i++) {
+                hearts += '❤️';
+            }
+            healthDisplay.textContent = hearts;
+
+            if (player.health <= 0) {
+                gameStarted = false;
+                alert(`Game Over! Distance: ${maxDistance}m`);
+                location.reload();
+            }
+        }
+
+        function drawPlayer() {
+            ctx.save();
+            ctx.translate(player.x - cameraX + player.width / 2, player.y + player.height / 2);
+            ctx.rotate(player.rotation);
+            ctx.fillStyle = playerColor;
+            ctx.fillRect(-player.width / 2, -player.height / 2, player.width, player.height);
+            ctx.restore();
+        }
+
+        function drawPlatforms() {
+            ctx.fillStyle = '#333333';
+            platforms.forEach(platform => {
+                const screenX = platform.x - cameraX;
+                if (screenX + platform.width > 0 && screenX < canvas.width) {
+                    ctx.fillRect(screenX, platform.y, platform.width, platform.height);
+                    ctx.strokeStyle = '#222';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(screenX, platform.y, platform.width, platform.height);
+                }
+            });
+        }
+
+        function drawEnemies() {
+            enemies.forEach(enemy => {
+                const screenX = enemy.x - cameraX;
+                if (screenX > 0 && screenX < canvas.width) {
+                    ctx.fillStyle = '#FF3333';
+                    ctx.fillRect(screenX, enemy.y, enemy.width, enemy.height);
+                    ctx.fillStyle = '#333';
+                    ctx.fillRect(screenX + 5, enemy.y + 5, 5, 5);
+                    ctx.fillRect(screenX + 15, enemy.y + 5, 5, 5);
+                }
+            });
+        }
+
+        function drawProjectiles() {
+            // Projectiles du joueur
+            ctx.fillStyle = '#FFD700';
+            playerProjectiles.forEach(proj => {
+                const screenX = proj.x - cameraX;
+                ctx.fillRect(screenX, proj.y, proj.width, proj.height);
+            });
+
+            // Projectiles des ennemis
+            ctx.fillStyle = '#FF6666';
+            enemyProjectiles.forEach(proj => {
+                const screenX = proj.x - cameraX;
+                ctx.fillRect(screenX, proj.y, proj.width, proj.height);
+            });
+        }
+
+        function drawClouds() {
+            ctx.fillStyle = 'rgba(200, 200, 200, 0.3)';
+            for (let i = 0; i < 5; i++) {
+                const cloudX = (cameraX * 0.3 + i * 300) % (canvas.width + 200) - 100;
+                const cloudY = 50 + i * 40;
+                ctx.beginPath();
+                ctx.arc(cloudX, cloudY, 30, 0, Math.PI * 2);
+                ctx.arc(cloudX + 25, cloudY - 15, 35, 0, Math.PI * 2);
+                ctx.arc(cloudX + 50, cloudY, 30, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawInfiniteGround() {
+            const groundY = 550;
+            const tileWidth = 100;
+            const startTile = Math.floor(cameraX / tileWidth) - 1;
+            const endTile = startTile + Math.ceil(canvas.width / tileWidth) + 2;
+
+            for (let i = startTile; i <= endTile; i++) {
+                const x = i * tileWidth;
+                const isEven = i % 2 === 0;
+                ctx.fillStyle = isEven ? '#1a1a1a' : '#0d0d0d';
+                ctx.fillRect(x - cameraX, groundY, tileWidth, 50);
+
+                // Herbe noire pixelisée
+                ctx.fillStyle = '#000000';
+                for (let py = 0; py < tileWidth; py += 8) {
+                    for (let px = 0; px < tileWidth; px += 8) {
+                        if (Math.random() > 0.6) {
+                            ctx.fillRect(x - cameraX + px, groundY + (Math.random() > 0.5 ? 2 : 0), 4, 4);
+                        }
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            // Fond dégradé
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#E0F6FF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawClouds();
+            drawInfiniteGround();
+            drawPlatforms();
+            drawEnemies();
+            drawProjectiles();
+            drawPlayer();
+        }
+
+        function gameLoop() {
+            if (!gameStarted) return;
+
+            updatePlayer();
+            updateEnemies();
+            updateProjectiles();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initializeGround();
+        generateStructures(0, 1500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2a2b2c;
+    margin: 5;
+    padding: 0;
+    color: #11e3eb;
+
+
+}
+
+#one {
+    color:#1377e9;
+
+    
+    position: absolute;
+    text-align: bottom;
+    top: 10px;
+    left: 20px;
+
+    width: 300px;
+    height: 100px;
+
+    animation: allerRetour 10s ease-in-out infinite;
+}
+
+@keyframes allerRetour {
+    0% {
+        left: 20px;
+        color: #1377e9;
+    }
+    50% {
+        left: 1550px;
+        color: #03edfd;
+    }
+    100% {
+        left: 20px;
+        color: #1377e9;
+    }
+}
+
+#cube {
+    display: block;
+    position: absolute;
+    top: -127px;
+    left: 600px;
+    margin: 40px auto;
+    animation: rotation 4s linear infinite;
+    animation: scale 2s ease-in-out infinite;
+    scale: 0.4;
+
+}
+
+
+@keyframes scale {
+    0% {
+        transform: scale(0.4);
+    }
+    50% {
+        transform: scale(0.6);
+    }
+    100% {
+        transform: scale(0.4);
+    }
+}
+
+#logo {
+    position: absolute;
+    top: -230px;
+    right: -340px;
+    transform: scale(0.5);
+    animation: rotation 4s linear infinite;
+    scale: 0.2;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.classOne { 
+    
+}
+
+h1 {
+    color: #10ecec;
+    text-align: center;
+    scale: 2;
+    font-family:cursive ;
+    animation: allerRetour2 3s ease-in-out infinite;
+    animation: fondutitre 2s ease-in-out infinite;
+    widows: 2px 2px 4px #06003f;
+    
+}
+
+@keyframes allerRetour2 {
+    0% {
+        left: 200px;
+    }
+    50% {
+        left: 300px;
+    }
+    100% {
+        left: 200px;
+    }
+}
+
+@keyframes fondutitre {
+    0% {
+        color: #10aeec;
+    }
+    50% {
+        color: #03edfd;
+    }
+    100% {
+        color: #0991c7;
+    }
+}
+
+#two {
+    color:#0dd7e6;
+    position: absolute;
+    top: 800px;
+    left: 180px;
+
+}
+
+h2 {
+    font-family: italic;
+    text-align: center;
+    text-decoration: underline;
+
+}
+
+#premierparagraphe {
+    position: absolute;
+    top: 200px;
+    left: 80px;
+    width: 600px;
+    text-align: justify;
+    scale: 1.2;
+}
+
+#paragraphedeuxieme {
+    position: absolute;
+    top: 700px;
+    left: 1800px;
+    width: 300px;
+    text-align: justify;
+    scale: 1.2;
+    color: #fc0404;
+    background: linear-gradient(to right, #2b2626, #301c1c);
+}
+
+img {
+    position: absolute;
+    top: 200px;
+    left: 800px;
+    width: 600px;
+    height: 400px;
+
+}
+
+

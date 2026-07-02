@@ -1,0 +1,66 @@
+
+<!doctype html>
+  <html lang="fr">
+    <head>
+       <meta charset="utf-8">
+       <title>lE JEU</title>
+       
+       <link rel="stylesheet" href="realplatformer.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+       <script src="realplatformer.js"></script>
+       <script src="chessSpriteSheet.js"></script>
+       <script src="chessAI.js"></script>
+       <script src="chessHItboxes.js"></script>
+
+
+      </head>
+        <body>
+          <div id="background">
+             <select name="Choose your piece" id="Menu">
+              <option value="1">Pawn</option>
+              <option value="2">Bishop</option>
+              <option value="3">Knight</option>
+              <option value="4">Rook</option>
+              <option value="5">Queen</option>
+              <option value="6">King</option>
+             </select>
+             <button id="launchbossfiht" onclick="launchbossfiht">Destruction</button>
+              <div>
+                <img class="attackpionpsword" 
+                     id="attackpions" 
+                     src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F010%2F974%2F732%2Foriginal%2Fgreen-neon-button-glowing-neon-button-png.png&f=1&nofb=1&ipt=056b911b3e92fd2b2639452b226647e5289789ef988e6715bf8b6c64a4f86c85" 
+                     alt="attackpion"></img>
+              </div>
+                <div>
+                  <img id="spawnbossanimation" 
+                       alt="spawnanim" 
+                       src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2F3b94a9f3-2c27-43cc-83db-bbc9769410bd%2Fscale-to-width%2F755&f=1&nofb=1&ipt=4db1808ca45bc83a290acfb5f521afcf161b0cbb96f8184c9f29dbdedba923e0"></img>
+                </div>
+                  <div>
+                    <img class="darkknight" 
+                         class="enemie" 
+                         id="darkknightboss"
+                         alt="darkknight"
+                         src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpng.pngtree.com%2Fpng-vector%2F20240801%2Fourmid%2Fpngtree-black-piece-of-chess-in-pixel-art-style-png-image_13067821.png&f=1&nofb=1&ipt=2e3d7d81391a56f45223b89b823ba4f80973c3d09fb4d9c1b91055eba502918b"></img>
+                  </div>
+                      <div class="pion" id="pion"> 
+                        <a href="https://youtu.be/dQw4w9WgXcQ?si=kFeeb0yBtDvSuqLq"></a>
+                      </div> 
+                        <div class="ennemy" id="firstEnnemy"></div> 
+                          <div class="wall" id="wall3"></div>
+                          <div class="wall" id="wall4"></div>
+                          <div class="wall" id="wall5"></div>
+                          <div class="wall" id="wall1"></div>
+                          <div class="wall" id="wall2"></div>
+                          <div class="wall" id="wall6"></div>
+                          <a href="#timer"></a>
+                          <div><img alt="animbossintro" src="pixil-gif-drawing(1).gif" id="animationintrovsboss"></div> 
+        </body>
+  </html>
+   
+
+
+  
+
+  
