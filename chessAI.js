@@ -1,10 +1,10 @@
 let notInSight = false
-document.addEventListener("DOMContentLoaded", () =>{   
+document.addEventListener("DOMContentLoaded", () =>{
     const pion = document.getElementById("pion")
     const ennemy = document.getElementById("firstEnnemy")
     let posPionX = parseFloat(window.getComputedStyle(pion).getPropertyValue("left"))
     let posPionY = parseFloat(window.getComputedStyle(pion).getPropertyValue("top"))
-    let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left")) 
+    let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left"))
     let posEnnemyY = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("top"))
     function calculusOfPosition(){
         // console.log("calculus")
@@ -12,10 +12,11 @@ document.addEventListener("DOMContentLoaded", () =>{
         const ennemy = document.getElementById("firstEnnemy")
         let posPionX = parseFloat(window.getComputedStyle(pion).getPropertyValue("left"))
         let posPionY = parseFloat(window.getComputedStyle(pion).getPropertyValue("top"))
-        let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left")) 
+        let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left"))
         let posEnnemyY = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("top"))
         // console.log(posEnnemyX, posEnnemyY, posPionX, posPionY)
     }
+      ennemyDead=false;
     setInterval(calculusOfPosition, 30)
     function followPlayer(){
         if (ennemyDead)   return;
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () =>{
             const ennemy = document.getElementById("firstEnnemy")
             let posPionX = parseFloat(window.getComputedStyle(pion).getPropertyValue("left"))
             let posPionY = parseFloat(window.getComputedStyle(pion).getPropertyValue("top"))
-            let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left")) 
+            let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left"))
             let posEnnemyY = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("top"))
             let step = 3
             // console.log(posEnnemyX, posEnnemyY, posPionX, posPionY)
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () =>{
                 ennemy.style.left = posEnnemyX+"px"
                 // console.log(ennemy.style.left)
                 goingLeft = 1
-                // console.log(goingDown, goingLeft, goingRight, goingUp)                
+                // console.log(goingDown, goingLeft, goingRight, goingUp)
             }
             if (posEnnemyY < posPionY ){
                 posEnnemyY = posEnnemyY+step
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () =>{
     function checkAttack(){
         let posPionX = parseFloat(window.getComputedStyle(pion).getPropertyValue("left"))
         let posPionY = parseFloat(window.getComputedStyle(pion).getPropertyValue("top"))
-        let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left")) 
+        let posEnnemyX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left"))
         let posEnnemyY = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("top"))
         // console.log("check")
         if(posEnnemyX - posPionX < 500 && posEnnemyY - posPionY < 500 ){
@@ -82,6 +83,6 @@ document.addEventListener("DOMContentLoaded", () =>{
             // console.log("check2")
     }
     requestAnimationFrame(checkAttack)
-    
+
 }
 )

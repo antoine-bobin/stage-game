@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let dx = 0, dy = 0;
             if (keys['ArrowUp']) {
-                dy -= 1; 
+                dy -= 1;
                 direction = 'haut'
             }
             if (keys['ArrowDown']) {
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', function(attackps){
       if (attackps.code === 'Space') {
           attackps.preventDefault();
-          showandHideattack();
+          showAndHideattack();
       }
     });
 
@@ -116,25 +116,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let activePieceValue = activePiece.value;
   function showAndHideattack() {
     let activePieceValue = activePiece.value;
-    console.log(activePieceValue)
+    console.log('activePieceValue', activePieceValue)
     if (activePieceValue == "1"){
       let weapons = document.getElementsByClassName("attackpionpsword");
       let weapon = weapons[0]
       if (direction === 'haut') {
         weapon.style.transform = 'rotate(90deg)';
         weapon.style.marginLeft = '-925px';
-        weapon.style.marginTop = '-390px'; 
+        weapon.style.marginTop = '-390px';
       }
       if (direction === 'bas') {
         weapon.style.transform = 'rotate(270deg)';
         weapon.style.marginLeft = '-925px';
-        weapon.style.marginTop = '-210px';  
+        weapon.style.marginTop = '-210px';
       }
       if (direction === 'gauche') {
         weapon.style.transform = 'rotate(180deg)';
         weapon.style.marginLeft = '-990px';
         weapon.style.marginTop = '-310px';
-      
+
       }
       if (direction === 'droite') {
         weapon.style.transform = 'rotate(0deg)';
@@ -142,11 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
         weapon.style.marginTop = '-310px';
       }
       weapon.style.left = posX + 'px';
-      weapon.style.top = posY + 'px'; 
+      weapon.style.top = posY + 'px';
       weapon.style.display = "block";
       setTimeout(function() {
         weapon.style.display = "none";
-      }, 380); 
+      }, 380);
     }
     if (activePieceValue == "2"){
       const pion = document.getElementById("pion")
@@ -158,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (direction === 'haut') {
         weapon.style.transform = 'rotate(0deg)';
         weapon.style.marginLeft = '-133.5px';
-        weapon.style.marginTop = '-400px'; 
+        weapon.style.marginTop = '-400px';
         console.log(weapon)
       }
-      if (direction === 'bas') { 
+      if (direction === 'bas') {
         weapon.style.transform = 'rotate(180deg)';
         weapon.style.marginLeft = '-150px';
-        weapon.style.marginTop = '-225px';  
+        weapon.style.marginTop = '-225px';
         console.log(weapon)
       }
       if (direction === 'gauche') {
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         weapon.style.marginLeft = '-200px';
         weapon.style.marginTop = '-320px';
         console.log(weapon)
-      
+
       }
       if (direction === 'droite') {
         weapon.style.transform = 'rotate(90deg)';
@@ -187,37 +187,37 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(weapon)
       }
       weapon.style.left = posX + 'px';
-      weapon.style.top = posY + 'px'; 
+      weapon.style.top = posY + 'px';
       weapon.style.display = "block";
       console.log(weapon)
       console.log(weapon.getBoundingClientRect())
       console.log(window.getComputedStyle(weapon).display)
       setTimeout(function() {
         weapon.style.display = "none";
-      }, 380); 
+      }, 380);
 
-      
+
     }
-  } 
+  }
 
   const launchBossButton = document.getElementById("launchbossfiht");
   if (launchBossButton) {
     launchBossButton.onclick = function launchbossfight() {
-      let  ennemyDead = true;
+      let  ennemyBossDead = true;
       console.log('launch boss');
 
       const boss = document.getElementById("darkknightboss");
       if (!boss) return;
       boss.style.position = boss.style.position || 'absolute';
       boss.style.display = "block";
-   
+
       let bossposX = parseInt(boss.style.left, 10);
       let bossposY = parseInt(boss.style.top, 10);
       if (isNaN(bossposX)) bossposX = 900;
       if (isNaN(bossposY)) bossposY = 100;
       boss.style.left = bossposX + 'px';
       boss.style.top = bossposY + 'px';
-  
+
       const animationintrovsboss = document.getElementById("animationintrovsboss");
       if (animationintrovsboss) {
         animationintrovsboss.style.display = "block";
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         spawnbossanim.style.display = "block";
         animationintrovsboss.style.display = "none";
 
-        
+
       }
         setTimeout(function() {
           if (spawnbossanim) {
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const maxSpeed = 4;
           const accel = 0.14;
-          let bossVelX = 0; 
+          let bossVelX = 0;
           let bossVelY = 0;
           let shootCooldown = 0;
           const projectiles = [];
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cubeboss.style.top = bossposY + 'px';
             cubeboss.style.pointerEvents = 'none';
             document.body.appendChild(cubeboss);
-      
+
             const angle = Math.random() * Math.PI * 2;
             const speed = 6 + Math.random() * 2;
             projectiles.push({
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const p = projectiles[i];
               p.x += p.vx;
               p.y += p.vy;
- 
+
               if (p.x <= 0 || p.x >= 1800 - 20) {
                 p.vx = -p.vx;
                 p.x = Math.max(0, Math.min(1800 - 20, p.x));
@@ -419,10 +419,125 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1700);
     };
   }
+
+
+
+
+
+
+  let wallRight = false
+  let wallLeft = false
+  let wallUp = false
+  let wallDown = false
+  let ennemyDead = false
+
+  console.log("start file hitboxes")
+  function hitboxes(){
+    // console.log("function hitboxes")
+    const pion = document.getElementById("pion")
+    const ennemy = document.getElementById("firstEnnemy")
+    const sword = document.getElementById("attackpions")
+    const walls = document.querySelectorAll(".wall")
+    let pionStyleX = parseFloat(window.getComputedStyle(pion).getPropertyValue("left"))
+    let pionStyleY = parseFloat(window.getComputedStyle(pion).getPropertyValue("top"))
+    let ennemyStyleX = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("left"))
+    let ennemyStyleY = parseFloat(window.getComputedStyle(ennemy).getPropertyValue("top"))
+    let swordStyleX = parseFloat(window.getComputedStyle(sword).getPropertyValue("left"))
+    let swordStyleY = parseFloat(window.getComputedStyle(sword).getPropertyValue("top"))
+    // sword.style.display = "block"
+    let hitboxPion = {
+      x: pionStyleX,
+      y: pionStyleY,
+      width: 50,
+      height: 50,
+    }
+    let hitboxPionWall = {
+      x: pionStyleX,
+      y: pionStyleY,
+      width: 52,
+      height: 51,
+    }
+    let hitboxEnnemy = {
+      x: ennemyStyleX,
+      y: ennemyStyleY,
+      width: 45,
+      height: 44,
+    }
+    let hitboxSword = {
+      x: swordStyleX,
+      y: swordStyleY,
+      width: 160,
+      height: 50,
+    }
+
+    walls.forEach(wall => {
+      const wallStyle = wall.getBoundingClientRect()
+      // console.log(wallStyle)
+      const hitboxWall = {
+        x: wallStyle.left,
+        y: wallStyle.top,
+        width: wallStyle.width,
+        height: wallStyle.height,
+      }
+
+      if (
+        hitboxPionWall.x < hitboxWall.x + hitboxWall.width &&
+        hitboxPionWall.x + hitboxPionWall.width > hitboxWall.x &&
+        hitboxPionWall.y < hitboxWall.y + hitboxWall.height &&
+        hitboxPionWall.y + hitboxPionWall.height > hitboxWall.y
+
+      ) {
+        console.log("wall hit")
+        if (direction == "haut"  && wallDown == false ){
+          console.log("haut")
+          wallUp = true
+        }
+        else
+        if (direction == "bas" && wallUp == false ){
+          console.log("bas")
+          wallDown = true
+        }
+        else
+        if (direction == "gauche" && wallRight == false ){
+          console.log("gauche")
+          wallLeft = true
+        }
+        else
+        if(direction == "droite" && wallLeft == false){
+          console.log("droite")
+          wallRight = true
+        }
+      }
+
+    })
+    if(ennemyDead) return
+    if (
+      hitboxPion.x < hitboxEnnemy.x + hitboxEnnemy.width &&
+      hitboxPion.x + hitboxPion.width > hitboxEnnemy.x &&
+      hitboxPion.y < hitboxEnnemy.y + hitboxEnnemy.height &&
+      hitboxPion.height + hitboxPion.y > hitboxEnnemy.y
+    ) {
+      console.log("player killed")
+
+    }
+    if (sword.style.display == "block")
+      if (
+        hitboxSword.x < hitboxEnnemy.x + hitboxEnnemy.width &&
+        hitboxSword.x + hitboxSword.width > hitboxEnnemy.x &&
+        hitboxSword.y < hitboxEnnemy.y + hitboxEnnemy.height &&
+        hitboxSword.height + hitboxSword.y > hitboxEnnemy.y
+      ) {
+        console.log("ennemy killed")
+        ennemy.style.visibility = "hidden"
+        ennemyDead = true
+        ennemy.style.pointerEvents = "none"
+      }
+  }
+  setInterval(hitboxes, 100)
 });
 
 
 
 
- 
- 
+
+
